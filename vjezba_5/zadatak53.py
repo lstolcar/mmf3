@@ -17,7 +17,8 @@ r_A0 = podatci[:, 0]
 V_K0 = podatci[:, 1]
 n=len(r_A0)
 Pl=[]
-for x in r_A0:
+X=np.linspace(0,10,100)
+for x in X:
     s=0
     for i in range(n):
         L=1
@@ -26,9 +27,10 @@ for x in r_A0:
                 L*=(x - r_A0[j])/(r_A0[i]-r_A0[j])
         s+=V_K0[i]*L 
     Pl.append(s)
-print(len(Pl))
+#print(Pl)
 plt.figure()
-plt.plot(r_A0, Pl,'o', color='red', label='Lagrangeovi polinom')
+plt.plot(X, Pl,'o', color='red', label='Lagrangeovi polinom')
+plt.plot(r_A0, V_K0,linestyle='none', marker='o', markerfacecolor='none', markeredgecolor='black', markeredgewidth=1, label='(r_{i},V_{i})', alpha=1)
 plt.xlabel('r/Å')               
 plt.ylabel('V/K') 
 plt.title('Interpolacijski polinom P6(x) za potencijalnu energiju V(H-H)')

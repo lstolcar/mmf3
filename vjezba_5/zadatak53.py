@@ -1,8 +1,7 @@
 import numpy as np  
 import matplotlib.pyplot as plt             
 import math as mt
-
-import numpy as np
+import polint as polint
 a0_to_A = 0.52917721092    
 hartree_to_K = 315775.04   
 data = np.loadtxt(r"C:\Users\lovre\mmf3\mmf3\mmf3\vjezba_5\V(H-H).txt", comments="#",skiprows=2)
@@ -27,16 +26,28 @@ for x in X:
                 L*=(x - r_A0[j])/(r_A0[i]-r_A0[j])
         s+=V_K0[i]*L 
     Pl.append(s)
-#print(Pl)
+Y=[]
+iks=np.linspace(0,10,100)
+Y = []
+dY=[]
+for iks_ in iks:
+    yN, dy = polint.polint(r_A0, V_K0, len(r_A), iks_)
+    Y.append(yN)
+    dY.append(abs(dy))
+
+converted1= np.column_stack((X, Pl, Y, dY))
+np.savetxt(r"C:\Users\lovre\mmf3\mmf3\mmf3\vjezba_5\V(H-H)_inter.txt", converted1, header="x    Lagrange    Neville    pogreska", fmt="%.6f")
+
 plt.figure()
-plt.plot(X, Pl,'o', color='red', label='Lagrangeovi polinom')
+plt.plot(X, Pl,'o', color='red', label='Lagrange')
 plt.plot(r_A0, V_K0,linestyle='none', marker='o', markerfacecolor='none', markeredgecolor='black', markeredgewidth=1, label='(r_{i},V_{i})', alpha=1)
+plt.errorbar(X, Y, yerr=dY, fmt='o', markerfacecolor='blue', markeredgecolor='blue', ecolor='blue',markersize=2, capsize=0.5, label='Neville')    
 plt.xlabel('r/Å')               
 plt.ylabel('V/K') 
-plt.title('Interpolacijski polinom P6(x) za potencijalnu energiju V(H-H)')
+plt.title('Interpolacija')
 plt.legend() 
 plt.grid(True)
-plt.xlim(0, 11)    
+plt.xlim(1, 10)    
 plt.ylim(-10, 10)
 plt.show()   
 

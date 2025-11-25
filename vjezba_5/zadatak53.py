@@ -40,7 +40,7 @@ for iks_ in iks:
     dYabs.append(abs(dy))
 
 
-cs=CubicSpline(r_A0, V_K0, bc_type='natural')
+cs=CubicSpline(r_A0, V_K0,bc_type=((1,195.45),(1,0.0309)))
 X_cs=np.linspace(2.81,9.81,71)
 Y_cs=cs(X_cs)
 

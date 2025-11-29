@@ -23,9 +23,12 @@ def otpori(R1=1, R2=2, R3=4, R4=1):
     for i in range(1,4):
         d2=(d[i]-a[i-1]*d_2[i-1])/(b[i]-a[i-1]*c_2[i-1])
         d_2.append(d2)
-        for i in range(1,3):
+        if i==3:
+            break
+        else:
             c2=c[i]/(b[i]-a[i-1]*c_2[i-1])
-            c_2.append(c2)
+            c_2.append(c2)  
+    
     I=[]
     for i in [3,2,1,0]:
         if i==3:

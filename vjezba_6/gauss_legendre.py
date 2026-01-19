@@ -18,7 +18,7 @@ def gauleg(x1, x2, n):
 
     m = (n + 1) // 2  
     # Broj nultočaka koje treba izračunati.
-    # Legendreovi polinomi imaju su simetrični pa je dovoljno računati polovicu, a ostale dobijemo simetrijom.
+    # Legendreovi polinomi su simetrični pa je dovoljno računati polovicu, a ostale dobijemo simetrijom.
 
     xm = 0.5 * (x2 + x1)  
     # Sredina intervala [x1, x2]
@@ -27,14 +27,14 @@ def gauleg(x1, x2, n):
     # Polovina duljine intervala [x1, x2]
     # Ove vrijednosti služe za preslikavanje  intervala [-1, 1] u [x1, x2].
 
-    # KREIRANJE NIZOVA ZA ČVOROVE I TEŽINE
+    # kreiranje nizova za čvorove i težine
     x = np.zeros(n)  
     # Niz za čvorove Gauss–Legendreove kvadrature
 
     w = np.zeros(n)  
     # Niz za težine Gauss–Legendreove kvadrature
 
-    # GLAVNA PETLJA ZA IZRAČUN ČVOROVA I TEŽINA
+    # GLAVNA PETLJA ZA IZRAČUN ČVOROVA I TEŽINA !
     for i in range(1, m + 1):
 
         # Početna aproksimacija i-tog korijena Legendreovog polinoma

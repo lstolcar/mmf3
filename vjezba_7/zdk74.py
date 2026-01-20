@@ -49,7 +49,6 @@ def f_sys(state):
 
 for i in range(N):
     y_curr = np.array([theta_RK4[i], omega_RK4[i]])
-    
     k1 = f_sys(y_curr)
     k2 = f_sys(y_curr + 0.5 * h * k1)
     k3 = f_sys(y_curr + 0.5 * h * k2)

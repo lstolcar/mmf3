@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def simulacija():
     l = 0.2484902028828339
     g = 9.81
-    t0, tN = 0, 50
+    t0, tN = 0, 20
     N = 200000
     h = (tN - t0) / N
     t = np.linspace(t0, tN, N+1)
@@ -92,29 +92,27 @@ def simulacija():
 
 def Runge_Kutta4(theta1=4, theta2=8, theta3=16, theta4=32, theta5=64):
 
-    # konstante
-    l = 0.2484902028828339
-    g = 9.81
 
-    # vremenski interval
+    l = 0.2484902028828339
+    g = 9.81    
     t0, tN = 0, 10
     N = 200
     h = (tN - t0) / N
     t = np.linspace(t0, tN, N+1)
 
-    # pocetni kutovi (u stupnjevima -> radijani)
+    
     thetas_deg = [theta1, theta2, theta3, theta4, theta5]
     thetas = [np.deg2rad(th) for th in thetas_deg]
 
-    # diferencijalna jednadžba
+
     def f(theta):
         return -(g / l) * np.sin(theta)
 
-    # RK4 solver
+    
     def rk4(theta0):
         y = np.zeros((2, N+1))
-        y[0, 0] = theta0   # theta(0)
-        y[1, 0] = 0.0      # theta'(0)
+        y[0, 0] = theta0   
+        y[1, 0] = 0.0      
 
         for n in range(N):
             k1_0 = h * y[1, n]
@@ -134,12 +132,12 @@ def Runge_Kutta4(theta1=4, theta2=8, theta3=16, theta4=32, theta5=64):
 
         return y
 
-    # crtanje grafova
+    
     for theta0, theta_deg in zip(thetas, thetas_deg):
 
         y_rk4 = rk4(theta0)
 
-        # analiticko rjesenje (kako si ti dao)
+    
         theta_analytic = theta0 * np.cos(np.sqrt(g/l) * t)
 
         plt.figure(figsize=(10, 6))
@@ -156,7 +154,7 @@ def Runge_Kutta4(theta1=4, theta2=8, theta3=16, theta4=32, theta5=64):
         plt.show()
 
 
-def euler(N, t0=0, tN=50):
+def euler(N, t0=0, tN=20):
     g = 9.81
     l = 0.2484902028828339
     theta0 = 4 * np.pi / 180
@@ -200,6 +198,6 @@ plt.show()
 
 
 
-#simulacija()
+simulacija()
 #Runge_Kutta4()
 #euler()

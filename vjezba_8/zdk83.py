@@ -2,9 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 metoda="eksplicitna" 
 A = 1e-2  
-L = 20.0  
-T_final = 400 * 0.5 
-dt = 10
+L = 20.0
+dt = 0.5  
+T_final = 400 * dt 
+
 
 N = 100
 dx = L / (N + 1)

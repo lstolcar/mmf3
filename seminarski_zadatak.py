@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation # Importiramo modul za animaciju
+import matplotlib.animation as animation 
 
 def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, A_osoba=0.7, A_padobran=44.0, h_otvaranja=1000, t_max=300):
     dt = 0.01
@@ -48,9 +48,9 @@ def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, A_osoba=0.7, A_padobra
 
         y[:, n+1] = y[:, n] + (dt/6)*(k1 + 2*k2 + 2*k3 + k4)
 
-    return t[:n+1], y[:, :n+1]
+    return t[:n+1], y[:, :n+1] , m, h0
 
-vrijeme, rezultati = skok_padobranca_rk4()
+vrijeme, rezultati, m, h0 = skok_padobranca_rk4()
 
 visina = rezultati[0]
 brzina = rezultati[1]
@@ -66,7 +66,7 @@ plt.title('Visina padobranca kroz vrijeme', fontsize=25)
 plt.xlabel('Vrijeme (s)', fontsize=25)
 plt.ylabel('Visina (m)', fontsize=25)
 plt.grid(True)
-plt.legend()
+plt.legend(fontsize=20)
 
 
 plt.subplot(1, 2, 2)
@@ -75,11 +75,20 @@ plt.title('Brzina padobranca kroz vrijeme', fontsize=25)
 plt.xlabel('Vrijeme (s)', fontsize=25)
 plt.ylabel('Brzina (m/s)', fontsize=25)
 plt.grid(True)
-plt.legend()
+plt.legend(fontsize=20)
 
 plt.tight_layout()
 plt.show()
-# --- NOVI NAČIN ANIMACIJE (VERTIKALNI PAD) ---
+
+plt.plot(vrijeme, m*9.81*visina, color='purple', label='Potencijalna energija (J)')
+plt.plot(vrijeme, 0.5*m*brzina**2, color='orange', label='Kinetička energija (J)')
+plt.plot(vrijeme, m*9.81*h0-0.5*m*brzina**2-m*9.81*visina, color='cyan', label='Gubitak energije (J)')
+plt.title('Energija padobranca kroz vrijeme', fontsize=25)
+plt.xlabel('Vrijeme (s)', fontsize=25)
+plt.ylabel('Energija (J)', fontsize=25)
+plt.grid(True)
+plt.legend(fontsize=20)
+plt.show()
 
 fig, ax = plt.subplots(figsize=(5, 8))
 
@@ -89,18 +98,17 @@ ax.set_ylabel('Visina (m)', fontsize=25)
 ax.set_title('Animacija skoka padobranca',fontsize=25)
 ax.grid(True)
 
-# vertikalna linija po kojoj pada padobranac
+
 ax.plot([0,0],[0,max(visina)], color='gray', linestyle='--')
 
-# padobranac
+
 point, = ax.plot(0, visina[0], 'ro', markersize=12)
 
-# tekst s informacijama
-text_label = ax.text(0.05, 0.95, '', transform=ax.transAxes)
 
-# linija za otvaranje padobrana
+text_label = ax.text(0.05, 0.80, '', transform=ax.transAxes, fontsize=20)
+
 ax.axhline(1000, color='red', linestyle='--', label='Padobranac')
-ax.legend()
+ax.legend(fontsize=20)
 
 def init():
     point.set_data([0], [visina[0]])
@@ -122,15 +130,15 @@ def animate(i):
 
     return point, text_label
 
-step = 10  # prikazuje svaki 10. okvir (možete povećati ako želite još brže)
+step = 10  
 indeksi = range(0, len(vrijeme), step)
 
 ani = animation.FuncAnimation(
     fig,
     animate,
-    frames=indeksi,          # umjesto len(vrijeme)
+    frames=indeksi,          
     init_func=init,
-    interval=0.001,          # i dalje vrlo mali interval
+    interval=0.001,          
     blit=True,
     repeat=True
 )

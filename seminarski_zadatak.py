@@ -62,18 +62,18 @@ plt.figure(figsize=(12, 5))
 plt.subplot(1, 2, 1)
 plt.plot(vrijeme, visina, color='blue', label='Visina (m)')
 plt.axhline(1000, color='red', linestyle='--', label='Otvaranje padobrana')
-plt.title('Visina padobranca kroz vrijeme')
-plt.xlabel('Vrijeme (s)')
-plt.ylabel('Visina (m)')
+plt.title('Visina padobranca kroz vrijeme', fontsize=25)
+plt.xlabel('Vrijeme (s)', fontsize=25)
+plt.ylabel('Visina (m)', fontsize=25)
 plt.grid(True)
 plt.legend()
 
 
 plt.subplot(1, 2, 2)
 plt.plot(vrijeme, np.abs(brzina), color='green', label='Brzina (m/s)')
-plt.title('Brzina padobranca kroz vrijeme')
-plt.xlabel('Vrijeme (s)')
-plt.ylabel('Brzina (m/s)')
+plt.title('Brzina padobranca kroz vrijeme', fontsize=25)
+plt.xlabel('Vrijeme (s)', fontsize=25)
+plt.ylabel('Brzina (m/s)', fontsize=25)
 plt.grid(True)
 plt.legend()
 
@@ -85,8 +85,8 @@ fig, ax = plt.subplots(figsize=(5, 8))
 
 ax.set_xlim(-1, 1)
 ax.set_ylim(0, max(visina) * 1.05)
-ax.set_ylabel('Visina (m)')
-ax.set_title('Animacija skoka padobranca')
+ax.set_ylabel('Visina (m)', fontsize=25)
+ax.set_title('Animacija skoka padobranca',fontsize=25)
 ax.grid(True)
 
 # vertikalna linija po kojoj pada padobranac
@@ -99,7 +99,7 @@ point, = ax.plot(0, visina[0], 'ro', markersize=12)
 text_label = ax.text(0.05, 0.95, '', transform=ax.transAxes)
 
 # linija za otvaranje padobrana
-ax.axhline(1000, color='red', linestyle='--', label='Otvaranje padobrana')
+ax.axhline(1000, color='red', linestyle='--', label='Padobranac')
 ax.legend()
 
 def init():

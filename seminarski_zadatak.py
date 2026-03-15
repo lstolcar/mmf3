@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math as mt
 
-def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, Cd=1.0, A_osoba=0.7, A_padobran=44.0, h_otvaranja=30, t_max=300):
+def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, A_osoba=0.7, A_padobran=44.0, h_otvaranja=30, t_max=300):
     dt = 0.01
     N = int(t_max / dt)  
     t = np.linspace(0, t_max, N+1)
@@ -31,10 +31,12 @@ def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, Cd=1.0, A_osoba=0.7, A
            
             if t_start_otvaranja == -1:
                 A = A_osoba
+                Cd = 1.0
             else:
                 progres = (t_trenutno - t_start_otvaranja) / vrijeme_inflacije
                 progres = min(1.0, max(0.0, progres)) 
                 A = A_osoba + (A_padobran - A_osoba) * progres
+                Cd = 0.7
 
             k_trenutno = 0.5 * rho * Cd * A
             return np.array([brzina, -g + (k_trenutno/m) * brzina**2])

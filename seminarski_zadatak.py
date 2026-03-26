@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation 
+import matplotlib.animation as animation
+from matplotlib.patches import Wedge 
 
 def skok_padobranca_rk4(m=80, h0=6000, g=9.81, rho=1.225, A_osoba=0.7, A_padobran=25.0, h_otvaranja=1000, t_max=300,N=10000):
     dt = t_max / N 
@@ -48,86 +49,99 @@ brzina = rezultati[1]
 
 plt.figure(figsize=(12, 5))
 
-
 plt.subplot(1, 2, 1)
 plt.plot(vrijeme, visina, color='blue', label='Visina(m)')
 plt.axhline(h_otvaranja, color='red', linestyle='--', label='Otvaranje padobrana')
 plt.title('Visina padobranca kroz vrijeme, N={}, h0={}m'.format(N, h0), fontsize=15)
 plt.xlabel('Vrijeme (s)', fontsize=25)
 plt.ylabel('Visina (m)', fontsize=25)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
 plt.grid(True)
 plt.legend(fontsize=20)
-
 
 plt.subplot(1, 2, 2)
 plt.plot(vrijeme, np.abs(brzina), color='green', label='Brzina (m/s)')
 plt.title('Brzina padobranca kroz vrijeme, N={}, h0={}m'.format(N, h0), fontsize=15)
 plt.xlabel('Vrijeme (s)', fontsize=25)
 plt.ylabel('Brzina (m/s)', fontsize=25)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
 plt.grid(True)
 plt.legend(fontsize=20)
 
 plt.tight_layout()
 plt.show()
 
-plt.plot(vrijeme, m*9.81*visina, color='purple', label='Potencijalna energija (J)')
-plt.plot(vrijeme, 0.5*m*brzina**2, color='orange', label='Kinetička energija (J)')
-plt.plot(vrijeme, m*9.81*h0-0.5*m*brzina**2-m*9.81*visina, color='cyan', label='Gubitak energije (J)')
-plt.title('Energija padobranca kroz vrijeme, N={}, h0={}m'.format(N, h0), fontsize=25)
-plt.xlabel('Vrijeme (s)', fontsize=25)
-plt.ylabel('Energija (J)', fontsize=25)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
+
+plt.plot(vrijeme, m*9.81*visina, label='Potencijalna energija (J)')
+plt.plot(vrijeme, 0.5*m*brzina**2, label='Kinetička energija (J)')
+plt.plot(vrijeme, m*9.81*h0-0.5*m*brzina**2-m*9.81*visina, label='Gubitak energije (J)')
+plt.title('Energija padobranca', fontsize=25)
+plt.xlabel('Vrijeme (s)')
+plt.ylabel('Energija (J)')
 plt.grid(True)
-plt.legend(fontsize=20)
+plt.legend()
 plt.show()
+
 
 fig, ax = plt.subplots(figsize=(5, 8))
 
 ax.set_xlim(-1, 1)
 ax.set_ylim(0, max(visina) * 1.05)
-ax.set_ylabel('Visina (m)', fontsize=25)
-ax.set_title('Animacija skoka padobranca, N={}, h0={}m'.format(N, h0), fontsize=25)
+ax.set_ylabel('Visina (m)', fontsize=20)
+ax.set_title('Animacija skoka padobranca', fontsize=20)
 ax.grid(True)
 
-ax.plot([0,0],[0,max(visina)], color='gray', linestyle='--')
-point, = ax.plot(0, visina[0], 'ro', markersize=12)
-text_label = ax.text(0.05, 0.80, '', transform=ax.transAxes, fontsize=20)
-ax.axhline(h_otvaranja, color='red', linestyle='--', label='Padobranac')
-ax.legend(fontsize=20)
+ax.plot([0,0],[0,max(visina)], linestyle='--')
+
+point, = ax.plot(0, visina[0], 'ro', markersize=10)
+
+
+padobran = Wedge(center=(0, visina[0]), r=1000, theta1=0, theta2=180, color='orange', alpha=0.6)
+padobran.set_visible(False)
+ax.add_patch(padobran)
+
+text_label = ax.text(0.05, 0.80, '', transform=ax.transAxes, fontsize=15)
+ax.axhline(h_otvaranja, color='red', linestyle='--', label='Otvaranje padobrana')
+ax.legend()
+
 def init():
     point.set_data([0], [visina[0]])
     text_label.set_text('')
-    return point, text_label
+    padobran.set_visible(False)
+    return point, text_label, padobran
+
 def animate(i):
     point.set_data([0], [visina[i]])
-    trenutna_visina = visina[i]
-    trenutna_brzina = brzina[i]
+
     text_label.set_text(
         f'Vrijeme: {vrijeme[i]:.1f} s\n'
-        f'Visina: {trenutna_visina:.1f} m\n'
-        f'Brzina: {trenutna_brzina:.1f} m/s'
+        f'Visina: {visina[i]:.1f} m\n'
+        f'Brzina: {brzina[i]:.1f} m/s'
     )
-    return point, text_label
+
+    if visina[i] <= h_otvaranja:
+        padobran.set_visible(True)
+
+        
+        progres = min(1.0, (h_otvaranja - visina[i]) / 300)
+        padobran.set_radius(0.04 + 0.12 * progres)
+
+        padobran.set_center((0, visina[i] + 100))
+    else:
+        padobran.set_visible(False)
+
+    return point, text_label, padobran
+
 step = 10  
 indeksi = range(0, len(vrijeme), step)
+
 ani = animation.FuncAnimation(
     fig,
     animate,
-    frames=indeksi,          
+    frames=indeksi,
     init_func=init,
-    interval=0.01,          
-    blit=True,
-    repeat=True
+    interval=10,
+    blit=True
 )
 
-print("Spremanje GIF-a... Može potrajati par sekundi.")
 ani.save('skok_padobranca.gif', writer='pillow', fps=30)
-print("GIF je spremljen kao 'skok_padobranca.gif' u tvoju mapu!")
-
 
 plt.show()
